@@ -32,22 +32,39 @@
 #+END_SRC
 * Org Capture Templates
 #+BEGIN_SRC elisp
+  ;; Nota: otra alternativa a la función (projectile-project-root) que devuelve la ruta absoluta,
+  ;; sería la variable local project-root que creamos nosotros en .dir-locals.el
+
+  (defun create-article-file ()
+    "Create an org file in path-my-project/articles/."
+    (interactive)
+    (let ((name (read-string "Filename without extension: ")))
+      (expand-file-name (format "%s.org" name)
+                        (concat (projectile-project-root) "articles/"))))
+
   (setq org-capture-templates
-        '(;; Video Templates
+        '(;; Article Templates
+          ("a" "Article")
+          ("an" "New Article" entry
+           (file (lambda () (call-interactively 'create-article-file)))
+           (file "templates/article.txt")
+           )
+
+          ;; Video Templates
           ("v" "Video")
           ("vt" "Videotutorial" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/videos.org"))
+            (lambda () ( concat (projectile-project-root) "pages/videos.org"))
             "Videotutorials")
            (file "templates/video.txt"))
           ("vo" "Overview" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/videos.org"))
+            (lambda () (concat (projectile-project-root) "pages/videos.org"))
             "Overviews")
            (file "templates/video.txt"))
           ("vc" "Conference / Talk" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/videos.org"))
+            (lambda () (concat (projectile-project-root) "pages/videos.org"))
             "Conferences / Talks")
            (file "templates/video.txt"))
 
@@ -55,12 +72,12 @@
           ("d" "Documentation")
           ("do" "Official Documentation" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/documentation.org"))
+            (lambda () (concat (projectile-project-root) "pages/documentation.org"))
             "Official Documentation")
            (file "templates/official-documentation.txt"))
           ("dn" "Non-Official Documentation" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/documentation.org"))
+            (lambda () (concat (projectile-project-root) "pages/documentation.org"))
             "Non-Official Documentation")
            (file "templates/non-official-documentation.txt"))
 
@@ -68,35 +85,37 @@
           ("i" "Issue")
           ("is" "Issues has been Solved" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/issues.org"))
+            (lambda () (concat (projectile-project-root) "pages/issues.org"))
             "Issues has been Solved")
            (file "templates/issue-solved.txt"))
           ("in" "Issue needs to be Solved" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/issues.org"))
+            (lambda () (concat (projectile-project-root) "pages/issues.org"))
             "Issues need to be Solved")
            (file "templates/issue-unsolved.txt"))
 
           ;; Dotfiles Template
           ("u" "User's Dot File" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/users-dotfiles.org"))
+            (lambda () (concat (projectile-project-root) "pages/users-dotfiles.org"))
             "Users' Dot Files")
            (file "templates/user-dotfile.txt"))
 
           ;; Books Template
           ("b" "Book")
           ("bn" "New Book" plain
-           (file+headline "pages/books.org" "Books")
+           (file+headline
+            (lambda () ( concat (projectile-project-root) "pages/books.org"))
+            "Books")
            (file "templates/book.txt"))
 
           ;; Nota:
           ;; 1. usamos "plain" en vez de "entry", éste segundo anidaba otro elemento en el árbol de tareas
           ;; 2. suponemos que el template ya agregamos los 3 niveles de profundidad
-          ;; 3. en vez de (dir-locals-find-file "./") podríamos usar.. (file-name-directory buffer-file-name)
+          ;; 3. en vez de (projectile-project-root) podríamos usar.. (file-name-directory buffer-file-name)
           ;; pero sólo se podría ejecutar la plantilla dentro del buffer de algún archivo del directorio pages/
           ("bc" "New Book Chapter" plain
-           (file+function (lambda () (concat (dir-locals-find-file "./") "pages/books.org"))
+           (file+function (lambda () (concat (projectile-project-root) "pages/books.org"))
                           (lambda () (call-interactively 'find-title-org-mode)))
            (file "templates/book-chapter.txt")
            )
@@ -105,13 +124,13 @@
           ("c" "Course")
           ("cn" "New Course" entry
            (file+headline
-            (lambda () (concat (dir-locals-find-file "./") "pages/courses.org"))
+            (lambda () (concat (projectile-project-root) "pages/courses.org"))
             "Courses")
            (file "templates/course.txt"))
 
           ;; idem que Book Chapter
           ("cl" "New Course Lesson" plain
-           (file+function (lambda () (concat (dir-locals-find-file "./") "pages/courses.org"))
+           (file+function (lambda () (concat (projectile-project-root) "pages/courses.org"))
                           (lambda () (call-interactively 'find-title-org-mode)))
            (file "templates/course-lesson.txt")
            )))
@@ -132,4 +151,13 @@
       ;; si lo encontró mueve el cursor a la siguiente título
       (outline-next-heading))
   )
+#+END_SRC
+* Generador de artículos
+#+BEGIN_SRC elisp
+  (defun create-article-file ()
+    "Create an org file in path-my-project/articles/."
+    (interactive)
+    (let ((name (read-string "Filename without extension: ")))
+      (expand-file-name (format "%s.org" name)
+                        (concat (projectile-project-root) "articles/"))))
 #+END_SRC
