@@ -6,10 +6,6 @@
   (org-babel-tangle)
   (dotspacemacs/sync-configuration-layers)
 #+END_SRC
-
-#+BEGIN_SRC shell :tangle no
-  ls
-#+END_SRC
 * Variables Globales
 #+BEGIN_SRC elisp
   ;; para los org-capture-templates utilice éste como workspace
@@ -40,34 +36,52 @@
         '(;; Video Templates
           ("v" "Video")
           ("vt" "Videotutorial" entry
-           (file+headline "pages/videos.org" "Videotutorials")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/videos.org"))
+            "Videotutorials")
            (file "templates/video.txt"))
           ("vo" "Overview" entry
-           (file+headline "pages/videos.org" "Overviews")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/videos.org"))
+            "Overviews")
            (file "templates/video.txt"))
           ("vc" "Conference / Talk" entry
-           (file+headline "pages/videos.org" "Conferences / Talks")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/videos.org"))
+            "Conferences / Talks")
            (file "templates/video.txt"))
 
           ;; Documentation Templates
           ("d" "Documentation")
           ("do" "Official Documentation" entry
-           (file+headline "pages/documentation.org" "Official Documentation")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/documentation.org"))
+            "Official Documentation")
            (file "templates/official-documentation.txt"))
           ("dn" "Non-Official Documentation" entry
-           (file+headline "pages/documentation.org" "Non-Official Documentation")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/documentation.org"))
+            "Non-Official Documentation")
            (file "templates/non-official-documentation.txt"))
+
+          ;; Issues Templates
           ("i" "Issue")
           ("is" "Issues has been Solved" entry
-           (file+headline "pages/issues.org" "Issues has been Solved")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/issues.org"))
+            "Issues has been Solved")
            (file "templates/issue-solved.txt"))
           ("in" "Issue needs to be Solved" entry
-           (file+headline "pages/issues.org" "Issues need to be Solved")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/issues.org"))
+            "Issues need to be Solved")
            (file "templates/issue-unsolved.txt"))
 
           ;; Dotfiles Template
           ("u" "User's Dot File" entry
-           (file+headline "pages/users-dotfiles.org" "Users' Dot Files")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/users-dotfiles.org"))
+            "Users' Dot Files")
            (file "templates/user-dotfile.txt"))
 
           ;; Books Template
@@ -90,7 +104,9 @@
           ;; Courses Template
           ("c" "Course")
           ("cn" "New Course" entry
-           (file+headline "pages/courses.org" "Courses")
+           (file+headline
+            (lambda () (concat (dir-locals-find-file "./") "pages/courses.org"))
+            "Courses")
            (file "templates/course.txt"))
 
           ;; idem que Book Chapter
