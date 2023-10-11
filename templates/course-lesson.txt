@@ -1,4 +1,4 @@
-* %^{Title} %? %^g
+*** %^{Title} %? %^g
   :PROPERTIES:
   :LESSON: %^{Number of Lesson}
   :LEVEL: %^{Level|easy|normal|difficult}
