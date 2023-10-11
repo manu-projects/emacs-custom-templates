@@ -1,3 +1,5 @@
+include init.mk
+
 SETUP_CONFIG_FILE=config.org
 
 all: emacs-run-tangle create-symbolic-link
