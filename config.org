@@ -11,7 +11,7 @@
   ;; para los org-capture-templates utilice éste como workspace
   ;; "~/org-files"
   (setq org-directory "~/org-files"
-        org-agenda-files '("pages/tasks.org"))
+        org-agenda-files '("doc/pages/tasks.org"))
 
   ;; agregamos el atajo para acceder a la agenda más fácil
   (global-set-key (kbd "C-c a") 'org-agenda)
@@ -40,7 +40,7 @@
     (interactive)
     (let ((name (read-string "Filename without extension: ")))
       (expand-file-name (format "%s.org" name)
-                        (concat (projectile-project-root) "articles/"))))
+                        (concat (projectile-project-root) "doc/articles/"))))
 
   (setq org-capture-templates
         '(;; Article Templates
@@ -54,17 +54,17 @@
           ("v" "Video")
           ("vt" "Videotutorial" entry
            (file+headline
-            (lambda () ( concat (projectile-project-root) "pages/videos.org"))
+            (lambda () ( concat (projectile-project-root) "doc/pages/videos.org"))
             "Videotutorials")
            (file "templates/video.txt"))
           ("vo" "Overview" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/videos.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/videos.org"))
             "Overviews")
            (file "templates/video.txt"))
           ("vc" "Conference / Talk" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/videos.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/videos.org"))
             "Conferences / Talks")
            (file "templates/video.txt"))
 
@@ -72,12 +72,12 @@
           ("d" "Documentation")
           ("do" "Official Documentation" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/documentation.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/documentation.org"))
             "Official Documentation")
            (file "templates/official-documentation.txt"))
           ("dn" "Non-Official Documentation" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/documentation.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/documentation.org"))
             "Non-Official Documentation")
            (file "templates/non-official-documentation.txt"))
 
@@ -85,19 +85,19 @@
           ("i" "Issue")
           ("is" "Issues has been Solved" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/issues.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/issues.org"))
             "Issues has been Solved")
            (file "templates/issue-solved.txt"))
           ("in" "Issue needs to be Solved" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/issues.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/issues.org"))
             "Issues need to be Solved")
            (file "templates/issue-unsolved.txt"))
 
           ;; Dotfiles Template
           ("u" "User's Dot File" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/users-dotfiles.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/users-dotfiles.org"))
             "Users' Dot Files")
            (file "templates/user-dotfile.txt"))
 
@@ -105,7 +105,7 @@
           ("b" "Book")
           ("bn" "New Book" plain
            (file+headline
-            (lambda () ( concat (projectile-project-root) "pages/books.org"))
+            (lambda () ( concat (projectile-project-root) "doc/pages/books.org"))
             "Books")
            (file "templates/book.txt"))
 
@@ -113,9 +113,9 @@
           ;; 1. usamos "plain" en vez de "entry", éste segundo anidaba otro elemento en el árbol de tareas
           ;; 2. suponemos que el template ya agregamos los 3 niveles de profundidad
           ;; 3. en vez de (projectile-project-root) podríamos usar.. (file-name-directory buffer-file-name)
-          ;; pero sólo se podría ejecutar la plantilla dentro del buffer de algún archivo del directorio pages/
+          ;; pero sólo se podría ejecutar la plantilla dentro del buffer de algún archivo del directorio doc/pages/
           ("bc" "New Book Chapter" plain
-           (file+function (lambda () (concat (projectile-project-root) "pages/books.org"))
+           (file+function (lambda () (concat (projectile-project-root) "doc/pages/books.org"))
                           (lambda () (call-interactively 'find-title-org-mode)))
            (file "templates/book-chapter.txt")
            )
@@ -124,13 +124,13 @@
           ("c" "Course")
           ("cn" "New Course" entry
            (file+headline
-            (lambda () (concat (projectile-project-root) "pages/courses.org"))
+            (lambda () (concat (projectile-project-root) "doc/pages/courses.org"))
             "Courses")
            (file "templates/course.txt"))
 
           ;; idem que Book Chapter
           ("cl" "New Course Lesson" plain
-           (file+function (lambda () (concat (projectile-project-root) "pages/courses.org"))
+           (file+function (lambda () (concat (projectile-project-root) "doc/pages/courses.org"))
                           (lambda () (call-interactively 'find-title-org-mode)))
            (file "templates/course-lesson.txt")
            )))
@@ -155,9 +155,9 @@
 * Generador de artículos
 #+BEGIN_SRC elisp
   (defun create-article-file ()
-    "Create an org file in path-my-project/articles/."
+    "Create an org file in path-my-project/doc/articles/."
     (interactive)
     (let ((name (read-string "Filename without extension: ")))
       (expand-file-name (format "%s.org" name)
-                        (concat (projectile-project-root) "articles/"))))
+                        (concat (projectile-project-root) "doc/articles/"))))
 #+END_SRC
