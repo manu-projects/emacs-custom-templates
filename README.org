@@ -1,3 +1,5 @@
+#+TITLE: Emacs Custom Templates
+[[file:images/meme-emacs.png]]
 * Descripción de la estructura de directorio
 - ~config.org~ describe los bloques de configuración de emacs en ~elisp~
 - ~examples.org~ ejemplos de configuración
