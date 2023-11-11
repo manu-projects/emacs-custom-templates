@@ -43,7 +43,15 @@
                         (concat (projectile-project-root) "doc/articles/"))))
 
   (setq org-capture-templates
-        '(;; Article Templates
+        '(;; Task Templates
+          ("t" "Task")
+          ("tn" "New Task" entry
+           (file+headline
+            (lambda () ( concat (projectile-project-root) "doc/pages/tasks.org"))
+            "Tasks")
+           (file "templates/task.txt"))
+
+          ;; Article Templates
           ("a" "Article")
           ("an" "New Article" entry
            (file (lambda () (call-interactively 'create-article-file)))
