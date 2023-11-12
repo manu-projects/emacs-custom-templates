@@ -1,4 +1,4 @@
-include helper.mk
+include ~/.makefile-utils/Makefile
 include init.mk
 
 SETUP_CONFIG_FILE=config.org
@@ -9,8 +9,6 @@ DIRECTORIES=$(shell cat directories.cfg | xargs)
 MAKEFILE_INIT= init.mk
 MAKEFILE_INIT_HIDDEN = $(addprefix .,$(MAKEFILE_INIT))
 
-all: emacs-run-tangle create-symbolic-link
-
 ##@ Acciones (Configuración global de Emacs)
 
 # - evaluará todos los bloques de código de un archivo .org (Org Mode) y generará un código fuente .el (Elisp)
@@ -20,7 +18,7 @@ emacs-run-tangle: ## crea/actualiza la configuración de config.org en ~/.emacs.
 				--eval "(require 'org)" \
 				--eval '(org-babel-tangle-file "${SETUP_CONFIG_FILE}")'
 
-create-symbolic-link: ## genera un enlace simbólico de los templates en ~/org-files a modo de punto de acceso global/compartido
+share-templates: ## genera un enlace simbólico de los templates en ~/org-files a modo de punto de acceso global/compartido
 	mkdir --verbose --parents ~/org-files/ \
 	&& ln --verbose --symbolic ${PWD}/templates ~/org-files/
 
@@ -31,7 +29,6 @@ create-symbolic-link: ## genera un enlace simbólico de los templates en ~/org-f
 #     pero de luego evaluarse/expandirse quedaría: update-projects: $(addsuffix /.init.mk,$(DIRECTORIES))
 #
 update-projects: $(addsuffix /$(MAKEFILE_INIT_HIDDEN),$(DIRECTORIES)) ## inicializa los proyectos de directories.cfg (recomendado)
-	@echo $(addsuffix /$(MAKEFILE_INIT_HIDDEN),$(DIRECTORIES))
 
 # Notas
 #  1. el target/objetivo + dependencia lo generalizamos,
@@ -39,9 +36,12 @@ update-projects: $(addsuffix /$(MAKEFILE_INIT_HIDDEN),$(DIRECTORIES)) ## inicial
 #
 #  2. lo utilizará el target/objetivo llamado update-porjects
 $(addsuffix /$(MAKEFILE_INIT_HIDDEN),$(DIRECTORIES)): $(MAKEFILE_INIT)
-	echo "Copiando $< en $(dir $@) .." && cat $< 1> $@ \
-	&& cp --verbose $< $@ \
-	&& make --no-print-directory --directory=$(dir $@) --file=$(notdir $@) init
+	@WHIPTAIL_DESCRIPTION="Archivo:\n $(notdir $@) \n\nRuta origen:\n $(dir $<) \n\nRuta destino:\n $(dir $@)"; \
+	$(WHIPTAIL_CONFIRM_COPY_ACTION) \
+	&& echo "Copiando de $< en $(dir $@)" \
+		&& cp --verbose $< $@ \
+		&& make --no-print-directory --directory=$(dir $@) --file=$(notdir $@) init \
+	|| echo "Confirmación cancelada"
 
 # TODO: notificar la creación del makefile oculto
 # TODO: evaluar necesidad copiar la configuración de .dir-locals.el
