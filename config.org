@@ -58,6 +58,15 @@
            (file "templates/article.txt")
            )
 
+          ;; Motivational Templates
+          ("m" "Motivational Text")
+          ("mt" "Short Story" entry
+           (file (lambda () ( concat (projectile-project-root) "doc/pages/short-stories.org")))
+           (file "templates/motivational-short-story.txt"))
+          ("mp" "Speech" entry
+           (file (lambda () ( concat (projectile-project-root) "doc/pages/speeches.org")))
+           (file "templates/motivational-speech.txt"))
+
           ;; Video Templates
           ("v" "Video")
           ("vt" "Videotutorial" entry
@@ -165,7 +174,17 @@
   (defun create-article-file ()
     "Create an org file in path-my-project/doc/articles/."
     (interactive)
-    (let ((name (read-string "Filename without extension: ")))
-      (expand-file-name (format "%s.org" name)
-                        (concat (projectile-project-root) "doc/articles/"))))
+    (let* ((filename (read-string "Filename without extension: "))
+           (org-file (format "%s.org" filename))
+           (directory-path (concat (projectile-project-root) "doc/articles/")))
+      (if (file-exists-p directory-path)
+          ;; si el directorio existe, creamos el archivo
+          (expand-file-name org-file directory-path)
+        ;; si el directorio NO existe, evaluamos las expresiones en secuencia
+        (progn
+          ;; 1. creamos el directorio
+          (make-directory directory-path t)
+          ;; 2. creamos el archivo
+          (expand-file-name org-file directory-path))
+          )))
 #+END_SRC
